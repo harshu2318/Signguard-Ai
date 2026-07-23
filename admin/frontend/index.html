@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignGuard AI — Admin Portal</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ─── DESIGN SYSTEM ────────────────────────────────────────────────────── */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 50%, #0d1527 100%);
+      --glass-bg: rgba(17, 24, 39, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-glow: rgba(99, 102, 241, 0.05);
+      
+      --color-primary: #6366f1; /* Indigo */
+      --color-primary-glow: rgba(99, 102, 241, 0.4);
+      --color-accent: #06b6d4;  /* Cyan */
+      --color-accent-glow: rgba(6, 182, 212, 0.4);
+      
+      --color-success: #10b981; /* Emerald */
+      --color-success-bg: rgba(16, 185, 129, 0.1);
+      --color-success-glow: rgba(16, 185, 129, 0.3);
+      
+      --color-danger: #ef4444;  /* Red */
+      --color-danger-bg: rgba(239, 68, 68, 0.1);
+      --color-danger-glow: rgba(239, 68, 68, 0.3);
+      
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dark: #6b7280;
+      
+      --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .title-font {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ─── CONTAINER ────────────────────────────────────────────────────────── */
+    .app-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* ─── HEADER ────────────────────────────────────────────────────────────── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px -4px var(--color-primary-glow);
+    }
+
+    .logo-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ─── GRID LAYOUT ───────────────────────────────────────────────────────── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ─── CARD BASICS ───────────────────────────────────────────────────────── */
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-premium);
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: radial-gradient(circle at 50% 0%, var(--glass-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* ─── LEFT COLUMN: PROFILE STATUS ───────────────────────────────────────── */
+    .status-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-unregistered {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: var(--color-danger);
+    }
+
+    .status-registered {
+      background: var(--color-success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: var(--color-success);
+    }
+
+    .status-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .status-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .status-info-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .status-info-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* ─── TAB AREA ──────────────────────────────────────────────────────────── */
+    .tabs-header {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.35rem;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 1.75rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.75rem;
+      background: transparent;
+      border: none;
+      border-radius: 9px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-smooth);
+    }
+
+    .tab-btn.active {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 4px 15px -2px var(--color-primary-glow);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    /* ─── DRAG & DROP ZONE ─────────────────────────────────────────────────── */
+    .drop-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.01);
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--color-primary);
+      background: rgba(99, 102, 241, 0.02);
+      box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.05);
+    }
+
+    .drop-zone-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: var(--transition-smooth);
+    }
+
+    .drop-zone:hover .drop-zone-icon {
+      color: var(--color-primary);
+      background: rgba(99, 102, 241, 0.1);
+      border-color: rgba(99, 102, 241, 0.2);
+      transform: scale(1.05);
+    }
+
+    .drop-zone-text h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .drop-zone-text p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── PREVIEWS & GALLERY ────────────────────────────────────────────────── */
+    .preview-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .preview-container {
+      position: relative;
+      aspect-ratio: 4/3;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .preview-img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+
+    .remove-preview-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.9);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .remove-preview-btn:hover {
+      background: var(--color-danger);
+      transform: scale(1.1);
+    }
+
+    /* ─── BUTTONS ───────────────────────────────────────────────────────────── */
+    .action-btn {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #4f46e5 100%);
+      box-shadow: 0 6px 20px -4px var(--color-primary-glow);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -4px var(--color-primary-glow);
+    }
+
+    .btn-primary:disabled {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-dark);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ─── VERIFICATION RESULTS PANEL ───────────────────────────────────────── */
+    .results-card {
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      display: none;
+      animation: slideDown 0.4s ease;
+    }
+
+    .results-card.active {
+      display: block;
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 1.25rem;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .badge-genuine {
+      background: var(--color-success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      color: var(--color-success);
+    }
+
+    .badge-forged {
+      background: var(--color-danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.15);
+      color: var(--color-danger);
+    }
+
+    .result-body {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    /* Circle Progress Bar */
+    .progress-circle-container {
+      width: 120px;
+      height: 120px;
+      position: relative;
+    }
+
+    .svg-circle {
+      width: 120px;
+      height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.03);
+      stroke-width: 10;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 314.16; /* 2 * PI * r (r=50) */
+      stroke-dashoffset: 314.16;
+      transition: stroke-dashoffset 1s ease-in-out;
+    }
+
+    .circle-progress-genuine {
+      stroke: var(--color-success);
+    }
+
+    .circle-progress-forged {
+      stroke: var(--color-danger);
+    }
+
+    .percentage-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .percentage-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .percentage-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: -2px;
+    }
+
+    .stats-table {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-weight: 600;
+    }
+
+    /* ─── NOTIFICATION TOAST ────────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      background: #1f2937;
+      border: 1px solid var(--glass-border);
+      color: white;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transform: translateY(150%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+    }
+
+    /* ─── ANIMATIONS ────────────────────────────────────────────────────────── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header>
+      <div class="logo-section">
+        <div class="logo-icon">
+          <i data-lucide="shield-check" style="color: white; width: 1.6rem; height: 1.6rem;"></i>
+        </div>
+        <div class="logo-text">
+          <h1>SignGuard Admin</h1>
+          <p>Writer-Dependent Verification Engine</p>
+        </div>
+      </div>
+      <a href="http://localhost:5173" target="_blank" class="back-btn">
+        <i data-lucide="external-link" style="width: 1rem; height: 1rem;"></i>
+        Open Main App
+      </a>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-grid">
+      
+      <!-- Left Column: Profile Status -->
+      <div class="status-section">
+        <div class="card">
+          <h3 class="card-title">
+            <i data-lucide="fingerprint" style="color: var(--color-primary); width: 1.25rem; height: 1.25rem;"></i>
+            Profile Status
+          </h3>
+          
+          <div id="status-badge-container">
+            <div class="status-badge status-unregistered">
+              <i data-lucide="alert-circle" style="width: 0.9rem; height: 0.9rem;"></i>
+              No Profile Registered
+            </div>
+          </div>
+
+          <div class="status-details">
+            <div class="status-info-row">
+              <span class="status-info-label">Sample Count</span>
+              <span class="status-info-value" id="info-samples">—</span>
+            </div>
+            <div class="status-info-row">
+              <span class="status-info-label">Sensitivity (Threshold)</span>
+              <span class="status-info-value" id="info-threshold">—</span>
+            </div>
+            <div class="status-info-row">
+              <span class="status-info-label">Last Updated</span>
+              <span class="status-info-value" id="info-date">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <h4 class="card-title" style="font-size: 1rem; margin-bottom: 0.75rem;">
+            <i data-lucide="info" style="color: var(--color-accent); width: 1.1rem; height: 1.1rem;"></i>
+            Quick Guide
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.5rem;">
+            1. Go to the <strong>Register</strong> tab. Upload <strong>3-5 reference images</strong> of your genuine signature. Click Register to build your pattern profile.
+          </p>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+            2. Go to the <strong>Verify</strong> tab, upload any signature image, and check if it matches the profile!
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Work Space -->
+      <div class="card" style="padding: 2rem;">
+        
+        <!-- Tabs Header -->
+        <div class="tabs-header">
+          <button class="tab-btn active" onclick="switchTab('register')">
+            <i data-lucide="user-plus" style="width: 1rem; height: 1rem;"></i>
+            Register Profile
+          </button>
+          <button class="tab-btn" onclick="switchTab('verify')">
+            <i data-lucide="check-circle" style="width: 1rem; height: 1rem;"></i>
+            Verify Signature
+          </button>
+        </div>
+
+        <!-- Tab Content: Register -->
+        <div id="tab-register" class="tab-content active">
+          <div class="drop-zone" id="drop-zone-register">
+            <div class="drop-zone-icon">
+              <i data-lucide="upload-cloud" style="width: 1.75rem; height: 1.75rem;"></i>
+            </div>
+            <div class="drop-zone-text">
+              <h4>Drag & drop samples here</h4>
+              <p>Upload 3 to 5 genuine signature images (PNG, JPG, BMP)</p>
+            </div>
+            <input type="file" id="input-register" multiple accept="image/*" style="display: none;">
+          </div>
+          
+          <div class="preview-gallery" id="gallery-register"></div>
+          
+          <button class="action-btn btn-primary" id="btn-submit-register" disabled onclick="submitRegistration()">
+            <i data-lucide="save" style="width: 1.1rem; height: 1.1rem;"></i>
+            Register Signature Profile
+          </button>
+        </div>
+
+        <!-- Tab Content: Verify -->
+        <div id="tab-verify" class="tab-content">
+          <div class="drop-zone" id="drop-zone-verify">
+            <div class="drop-zone-icon">
+              <i data-lucide="image" style="width: 1.75rem; height: 1.75rem;"></i>
+            </div>
+            <div class="drop-zone-text">
+              <h4>Drag & drop test signature</h4>
+              <p>Upload a single signature image to verify against profile</p>
+            </div>
+            <input type="file" id="input-verify" accept="image/*" style="display: none;">
+          </div>
+
+          <div class="preview-gallery" id="gallery-verify"></div>
+
+          <button class="action-btn btn-primary" id="btn-submit-verify" disabled onclick="submitVerification()">
+            <i data-lucide="scan-eye" style="width: 1.1rem; height: 1.1rem;"></i>
+            Verify Signature
+          </button>
+
+          <!-- Verification Results Panel -->
+          <div class="results-card" id="results-panel">
+            <div class="result-header">
+              <span style="font-weight: 700; font-size: 0.95rem;">Analysis Verdict</span>
+              <span id="result-badge-container">
+                <span class="result-badge badge-genuine">
+                  <i data-lucide="check" style="width: 0.9rem; height: 0.9rem;"></i>
+                  Genuine
+                </span>
+              </span>
+            </div>
+            
+            <div class="result-body">
+              <!-- Radial Progress Ring -->
+              <div class="progress-circle-container">
+                <svg class="svg-circle">
+                  <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
+                  <circle class="circle-progress" id="circle-progress" cx="60" cy="60" r="50"></circle>
+                </svg>
+                <div class="percentage-text">
+                  <div class="percentage-number" id="result-confidence">0%</div>
+                  <div class="percentage-label">match</div>
+                </div>
+              </div>
+              
+              <!-- Match Metadata Stats -->
+              <div class="stats-table">
+                <div class="stat-row">
+                  <span class="stat-label">Deviation Distance</span>
+                  <span class="stat-value" id="result-distance">0.00</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Profile Threshold</span>
+                  <span class="stat-value" id="result-threshold">0.00</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Checked File</span>
+                  <span class="stat-value" id="result-filename" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast">
+    <i data-lucide="info" style="width: 1rem; height: 1rem;"></i>
+    <span id="toast-text">Message goes here</span>
+  </div>
+
+  <script>
+    // ─── API BASE ────────────────────────────────────────────────────────────
+    const API_BASE = "http://localhost:8001";
+
+    // ─── STATE MANAGEMENT ────────────────────────────────────────────────────
+    let registeredFiles = [];
+    let verificationFile = null;
+
+    // ─── INITIALIZATION ──────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      fetchProfileStatus();
+      setupDragAndDrop();
+    });
+
+    // ─── TABS SWITCHING ──────────────────────────────────────────────────────
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      if (tab === 'register') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('tab-register').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('tab-verify').classList.add('active');
+      }
+    }
+
+    // ─── FETCH PROFILE STATUS ────────────────────────────────────────────────
+    async function fetchProfileStatus() {
+      try {
+        const response = await fetch(`${API_BASE}/profile-status`);
+        const status = await response.json();
+        const badgeContainer = document.getElementById('status-badge-container');
+        
+        if (status.registered) {
+          badgeContainer.innerHTML = `
+            <div class="status-badge status-registered">
+              <i data-lucide="check-circle" style="width: 0.9rem; height: 0.9rem;"></i>
+              Profile Registered
+            </div>
+          `;
+          document.getElementById('info-samples').innerText = `${status.sample_count} signatures`;
+          document.getElementById('info-threshold').innerText = status.threshold;
+          document.getElementById('info-date').innerText = status.registered_at;
+        } else {
+          badgeContainer.innerHTML = `
+            <div class="status-badge status-unregistered">
+              <i data-lucide="alert-circle" style="width: 0.9rem; height: 0.9rem;"></i>
+              No Profile Registered
+            </div>
+          `;
+          document.getElementById('info-samples').innerText = '—';
+          document.getElementById('info-threshold').innerText = '—';
+          document.getElementById('info-date').innerText = '—';
+        }
+        lucide.createIcons();
+      } catch (err) {
+        showToast("Error connecting to admin backend. Is it running?", true);
+      }
+    }
+
+    // ─── DRAG & DROP EVENT BINDINGS ──────────────────────────────────────────
+    function setupDragAndDrop() {
+      // 1. Register Drag-and-Drop
+      const dropZoneReg = document.getElementById('drop-zone-register');
+      const inputReg = document.getElementById('input-register');
+      
+      dropZoneReg.addEventListener('click', () => inputReg.click());
+      inputReg.addEventListener('change', (e) => handleFilesRegister(e.target.files));
+      
+      setupZoneListeners(dropZoneReg, handleFilesRegister);
+
+      // 2. Verify Drag-and-Drop
+      const dropZoneVerify = document.getElementById('drop-zone-verify');
+      const inputVerify = document.getElementById('input-verify');
+      
+      dropZoneVerify.addEventListener('click', () => inputVerify.click());
+      inputVerify.addEventListener('change', (e) => handleFileVerify(e.target.files[0]));
+      
+      setupZoneListeners(dropZoneVerify, (files) => handleFileVerify(files[0]));
+    }
+
+    function setupZoneListeners(zone, fileHandler) {
+      ['dragenter', 'dragover'].forEach(eventName => {
+        zone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          zone.classList.add('dragover');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        zone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          zone.classList.remove('dragover');
+        }, false);
+      });
+
+      zone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          fileHandler(files);
+        }
+      }, false);
+    }
+
+    // ─── REGISTER HANDLE FILES ───────────────────────────────────────────────
+    function handleFilesRegister(files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) {
+          showToast("Unsupported file type! Upload images only.", true);
+          continue;
+        }
+        // Avoid duplicate files
+        if (registeredFiles.some(f => f.name === file.name && f.size === file.size)) continue;
+        
+        registeredFiles.push(file);
+      }
+      renderRegisterPreviews();
+      validateRegisterButton();
+    }
+
+    function removeRegisterFile(index) {
+      registeredFiles.splice(index, 1);
+      renderRegisterPreviews();
+      validateRegisterButton();
+    }
+
+    function renderRegisterPreviews() {
+      const gallery = document.getElementById('gallery-register');
+      gallery.innerHTML = '';
+      
+      registeredFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = document.createElement('div');
+          preview.className = 'preview-container';
+          preview.innerHTML = `
+            <img class="preview-img" src="${e.target.result}" alt="preview">
+            <button class="remove-preview-btn" onclick="removeRegisterFile(${index})">
+              <i data-lucide="x" style="width: 0.95rem; height: 0.95rem;"></i>
+            </button>
+          `;
+          gallery.appendChild(preview);
+          lucide.createIcons();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function validateRegisterButton() {
+      const btn = document.getElementById('btn-submit-register');
+      btn.disabled = registeredFiles.length < 3;
+    }
+
+    // ─── VERIFY HANDLE FILE ──────────────────────────────────────────────────
+    function handleFileVerify(file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        showToast("Unsupported file type! Upload a signature image.", true);
+        return;
+      }
+      
+      verificationFile = file;
+      renderVerifyPreview();
+      document.getElementById('btn-submit-verify').disabled = false;
+      
+      // Hide previous results
+      document.getElementById('results-panel').classList.remove('active');
+    }
+
+    function removeVerifyFile() {
+      verificationFile = null;
+      document.getElementById('gallery-verify').innerHTML = '';
+      document.getElementById('btn-submit-verify').disabled = true;
+      document.getElementById('results-panel').classList.remove('active');
+    }
+
+    function renderVerifyPreview() {
+      const gallery = document.getElementById('gallery-verify');
+      gallery.innerHTML = '';
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = document.createElement('div');
+        preview.className = 'preview-container';
+        preview.style.margin = '1.5rem auto 0 auto';
+        preview.style.maxWidth = '250px';
+        preview.innerHTML = `
+          <img class="preview-img" src="${e.target.result}" alt="preview">
+          <button class="remove-preview-btn" onclick="removeVerifyFile()">
+            <i data-lucide="x" style="width: 0.95rem; height: 0.95rem;"></i>
+          </button>
+        `;
+        gallery.appendChild(preview);
+        lucide.createIcons();
+      };
+      reader.readAsDataURL(verificationFile);
+    }
+
+    // ─── SUBMIT REGISTRATION ─────────────────────────────────────────────────
+    async function submitRegistration() {
+      const btn = document.getElementById('btn-submit-register');
+      btn.disabled = true;
+      btn.innerHTML = `<span style="opacity: 0.8">Registering Profile...</span>`;
+      
+      const formData = new FormData();
+      registeredFiles.forEach(file => {
+        formData.append('files', file);
+      });
+
+      try {
+        const response = await fetch(`${API_BASE}/register`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          showToast("Profile registered successfully!");
+          registeredFiles = [];
+          renderRegisterPreviews();
+          validateRegisterButton();
+          fetchProfileStatus();
+        } else {
+          showToast(data.detail || "Registration failed.", true);
+        }
+      } catch (err) {
+        showToast("Error connecting to server.", true);
+      } finally {
+        btn.innerHTML = `<i data-lucide="save" style="width: 1.1rem; height: 1.1rem;"></i> Register Signature Profile`;
+        lucide.createIcons();
+      }
+    }
+
+    // ─── SUBMIT VERIFICATION ─────────────────────────────────────────────────
+    async function submitVerification() {
+      const btn = document.getElementById('btn-submit-verify');
+      btn.disabled = true;
+      btn.innerHTML = `<span style="opacity: 0.8">Verifying...</span>`;
+      
+      const formData = new FormData();
+      formData.append('file', verificationFile);
+
+      try {
+        const response = await fetch(`${API_BASE}/verify`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          showVerificationResults(data);
+        } else {
+          showToast(data.detail || "Verification failed.", true);
+        }
+      } catch (err) {
+        showToast("Error connecting to verification endpoint.", true);
+      } finally {
+        btn.innerHTML = `<i data-lucide="scan-eye" style="width: 1.1rem; height: 1.1rem;"></i> Verify Signature`;
+        btn.disabled = false;
+        lucide.createIcons();
+      }
+    }
+
+    // ─── RENDER VERIFICATION RESULTS ─────────────────────────────────────────
+    function showVerificationResults(data) {
+      const panel = document.getElementById('results-panel');
+      panel.classList.add('active');
+
+      // 1. Verdict badge
+      const badgeContainer = document.getElementById('result-badge-container');
+      if (data.verdict === 'Genuine') {
+        badgeContainer.innerHTML = `
+          <span class="result-badge badge-genuine">
+            <i data-lucide="check-circle" style="width: 0.9rem; height: 0.9rem;"></i>
+            Genuine
+          </span>
+        `;
+      } else {
+        badgeContainer.innerHTML = `
+          <span class="result-badge badge-forged">
+            <i data-lucide="alert-triangle" style="width: 0.9rem; height: 0.9rem;"></i>
+            Forged
+          </span>
+        `;
+      }
+
+      // 2. Stats
+      document.getElementById('result-distance').innerText = data.distance;
+      document.getElementById('result-threshold').innerText = data.threshold;
+      document.getElementById('result-filename').innerText = data.filename;
+      document.getElementById('result-filename').title = data.filename;
+
+      // 3. Confidence progress ring
+      const confNum = document.getElementById('result-confidence');
+      const progressRing = document.getElementById('circle-progress');
+      
+      // Update color class
+      progressRing.className = `circle-progress ${data.verdict === 'Genuine' ? 'circle-progress-genuine' : 'circle-progress-forged'}`;
+      
+      // Animated count-up
+      let count = 0;
+      const target = data.confidence;
+      const duration = 800; // ms
+      const interval = 16;  // ~60fps
+      const step = target / (duration / interval);
+      
+      const timer = setInterval(() => {
+        count += step;
+        if (count >= target) {
+          count = target;
+          clearInterval(timer);
+        }
+        confNum.innerText = `${Math.round(count)}%`;
+      }, interval);
+
+      // Dashoffset animation: 2 * PI * r = 314.16. Offset = 314.16 - (confidence/100) * 314.16
+      const offset = 314.16 - (target / 100) * 314.16;
+      setTimeout(() => {
+        progressRing.style.strokeDashoffset = offset;
+      }, 50);
+
+      lucide.createIcons();
+    }
+
+    // ─── TOAST NOTIFICATION HELPERS ──────────────────────────────────────────
+    let toastTimer = null;
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      
+      text.innerText = message;
+      
+      // Configure styles
+      if (isError) {
+        toast.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        toast.style.background = 'rgba(30, 27, 75, 0.95)';
+        toast.innerHTML = `<i data-lucide="alert-triangle" style="color: #ef4444; width: 1.1rem; height: 1.1rem;"></i> <span>${message}</span>`;
+      } else {
+        toast.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        toast.style.background = 'rgba(6, 78, 59, 0.95)';
+        toast.innerHTML = `<i data-lucide="check" style="color: #10b981; width: 1.1rem; height: 1.1rem;"></i> <span>${message}</span>`;
+      }
+      lucide.createIcons();
+
+      toast.classList.add('show');
+      
+      if (toastTimer) clearTimeout(toastTimer);
+      
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

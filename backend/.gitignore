@@ -1,0 +1,25 @@
+# Secrets
+.env
+
+# Generated model (user trains their own)
+ml/model.pkl
+
+# ChromaDB data (rebuilt from PDF)
+chroma_db/*
+!chroma_db/.gitkeep
+
+# Uploaded signature images (transient)
+uploads/*
+!uploads/.gitkeep
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,45 @@
+# Secrets & API Keys
+.env
+*.env
+backend/.env
+admin/backend/.env
+
+# Node Dependencies
+node_modules/
+frontend/node_modules/
+admin/frontend/node_modules/
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python Cache & Bytecode
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+
+# ML Models and ChromaDB Vector Data
+backend/ml/model.pkl
+backend/chroma_db/*
+!backend/chroma_db/.gitkeep
+
+# Transient uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+admin/backend/uploads/*
+!admin/backend/uploads/.gitkeep
+
+# IDE / Editor config
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS Files
+.DS_Store
+Thumbs.db

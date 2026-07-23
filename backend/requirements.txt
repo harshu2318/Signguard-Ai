@@ -1,0 +1,33 @@
+# ============================================================
+# SignGuard AI — Python Dependencies
+# ============================================================
+# Install with:  pip install -r requirements.txt
+# Requires: Python 3.13 (64-bit)
+# ============================================================
+
+# Web Framework
+fastapi>=0.115.0,<1.0
+uvicorn[standard]>=0.32.0,<1.0
+python-multipart>=0.0.12,<1.0
+python-dotenv>=1.0.0,<2.0
+
+# ML & Feature Extraction  (numpy 2.x = Python 3.13 compatible)
+numpy>=2.0,<3.0
+scipy>=1.14,<2.0
+scikit-image>=0.24,<1.0
+scikit-learn>=1.5,<2.0
+joblib>=1.4,<2.0
+matplotlib>=3.9,<4.0
+Pillow>=10.0,<12.0
+
+# RAG Stack  (use >=0.3.14 which dropped numpy<2 restriction)
+langchain>=0.3.14
+langchain-community>=0.3.14
+langchain-core>=0.3.27
+langchain-text-splitters>=0.3.4
+langchain-groq>=0.2.3
+langchain-huggingface>=0.1.2
+langchain-chroma>=0.1.4
+chromadb>=0.6.0
+sentence-transformers>=3.2.1
+pypdf>=5.1.0
